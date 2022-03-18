@@ -1,6 +1,10 @@
 using BuildingMaintenance.API.ExtenstionMethods;
 using BuildingMaintenance.Domain.Entities.Authentication;
 using BuildingMaintenance.Infrastructure.Data;
+using BuildingMaintenance.Repositories.IRepository.IBase;
+using BuildingMaintenance.Repositories.IRepository.IFileLogging;
+using BuildingMaintenance.Repositories.Repository.Base;
+using BuildingMaintenance.Repositories.Repository.FileLogging;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -39,6 +43,8 @@ namespace BuildingMaintenance.API
             services.AddIdentity<ApplicationUser, IdentityRole>()
                     .AddEntityFrameworkStores<AuthenticationDbContext>()
                     .AddDefaultTokenProviders();
+            
+            services.AddTransient<IFileLoggingRepository, FileLoggingRepository>();
 
             //For Authentication
             services.AddAuthentication(option =>
@@ -86,6 +92,8 @@ namespace BuildingMaintenance.API
             app.UseCors("CorsPolicy");
 
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

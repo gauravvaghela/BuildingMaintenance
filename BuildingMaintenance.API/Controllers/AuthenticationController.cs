@@ -63,8 +63,12 @@ namespace BuildingMaintenance.API.Controllers
         public async Task<IActionResult> UserRegistration([FromBody] UserRegistrationDTO registrationDTO)
         {
             var userExists = await _userManager.FindByNameAsync(registrationDTO.UserName);
+            var roleId = false;
 
-            var roleId = await _userManager.IsInRoleAsync(userExists, AppConstant.Admin);
+            if(userExists != null)
+            {
+                roleId = await _userManager.IsInRoleAsync(userExists, AppConstant.Admin);
+            }            
 
             if (userExists != null && roleId)
             {
